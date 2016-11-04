@@ -1,0 +1,75 @@
+<!--
+    Global Notification
+    How to use it.
+
+    1. declare the global event in the App tag
+    <UserEvent ux:Name="globalNotification" />
+
+    2. trigger a notification
+    globalNotification.raise({
+        // notification type: 'info' | 'success' | 'primary' | 'danger'| 'warning'
+        type: 'success',
+        // content
+        text: 'Yes!!!'
+    })
+-->
+<Panel ux:Class="wifly.Notification" ux:Name="root" Alignment="Top" Height="0">
+    <JavaScript>
+        var Observable = require('FuseJS/Observable')
+        // Notification duration
+        var DURATION = 3000
+        var COLORS = {
+            primary: '#3273dc',
+            info: '#e8e8e8',
+            success: '#23d160',
+            warning: '#ffdd57',
+            danger: '#ff3860'
+        }
+        var timeoutId
+        var visible = Observable(false)
+        var text = Observable('')
+        var textColor = Observable('#fff')
+        var theme = Observable(COLORS.info)
+        function showNotification(args) {
+            if (args.text) {
+                visible.value = true
+                text.value = args.text
+                theme.value = COLORS[args.type] || COLORS.primary
+                if (args.type === 'warning' || args.type === 'info') {
+                    textColor.value = '#000'
+                }
+                clearTimeout(timeoutId)
+                timeoutId = setTimeout(hideNotification, DURATION)
+            } else {
+                console.log('Notification content is required.')
+            }
+        }
+        function hideNotification() {
+            visible.value = false
+        }
+        module.exports = {
+            visible,
+            theme,
+            text,
+            textColor,
+            showNotification,
+            hideNotification
+        }
+    </JavaScript>
+    <!-- listening the global event and handle by a fucntion -->
+    <OnUserEvent EventName="globalNotification" Handler="{showNotification}" />
+    <Text Value="{text}" Color="{textColor}" Alignment="Center"></Text>
+    <Rectangle Layer="Background" Color="{theme}" CornerRadius="0,0,5,5" />
+    <WhileTrue Value="{visible}">
+        <Set root.Height="45" />
+    </WhileTrue>
+    <WhileFalse Value="{visible}">
+        <Set root.Height="0" />
+    </WhileFalse>
+    <!-- Hide the notification when clicked -->
+    <Clicked Handler="{hideNotification}" />
+    <LayoutAnimation>
+        <Move RelativeTo="Size" Y="-1" Duration="0.75" Easing="ElasticIn" />
+        <Resize Y="1" RelativeTo="SizeChange" Duration="0.75" Easing="ElasticIn" />
+    </LayoutAnimation>
+</Panel>

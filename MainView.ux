@@ -1,0 +1,94 @@
+<App>
+    <Fuse.iOS.StatusBarConfig IsVisible="false" />
+    <Fuse.Android.StatusBarConfig IsVisible="false" />
+
+    <Font ux:Global="RobotoRegular" File="assets/font/Roboto-Regular.ttf"/>
+    <Text ux:Class="WhiteText" Color="White" Font="RobotoRegular" />
+
+    <UserEvent ux:Name="globalNotification" />
+
+    <JavaScript>
+        var Observable = require('FuseJS/Observable')
+        var model = require('./utils/model')
+        var Clipboard = require('Clipboard')
+
+        var AI_GUIST_URL = 'http://hram-elb2-1033590448.cn-north-1.elb.amazonaws.com.cn/wemedia_2.0/common/commonAction!aiguest'
+        var loading = Observable(false)
+        var error = Observable('')
+        var password = Observable('')
+
+        function _parseAiGuestPass(password) {
+            password = password.match(/>.*</ig)[0]
+            password = password.match(/>.*</ig)[0]
+            return password.substr(1, password.length - 2 )
+        }
+
+        function getPassword() {
+            loading.value = true
+            model.get(AI_GUIST_URL).then(function(result) {
+                if(result.status === 0) {
+                    try{
+                        var password = _parseAiGuestPass(result.data.redata)
+                        password.value = password
+                        // copy to clipboard
+                        Clipboard.copy(password).then(function(result) {
+                            console.log('Success: ' + result)
+                        }, function(err) {
+                            console.log('Error: ' + err)
+                        })
+                    } catch(e) {
+                        password.value = ''
+                        globalNotification.raise({
+                            type: 'danger',
+                            text: 'Get AI-Guest password failed!'
+                        })
+                    }
+                } else {
+                    globalNotification.raise({
+                        type: 'danger',
+                        text: result.errmsg || 'Get AI-Guest password failed!'
+                    })
+                }
+            }, function(err) {
+                password.value = ''
+                globalNotification.raise({
+                    type: 'danger',
+                    text: err || 'Get AI_Guest password failed!'
+                })
+            }).then(function() {
+                setTimeout(function() {
+                    loading.value = false
+                }, 500)
+            })
+        }
+
+        module.exports = {
+            getPassword,
+            loading,
+            password,
+        }
+    </JavaScript>
+
+    <Rectangle Layer="Background" Color="#32333e" CornerRadius="5" />
+
+    <wifly.Notification />
+
+    <Grid Rows="1*,1*">
+        <WhiteText Alignment="Center" FontSize="30" Value="Wifly">
+            <DropShadow />
+        </WhiteText>
+        <DockPanel>
+            <Circle Dock="Top" Height="100" Width="100">
+                <Image File="assets/img/connect-btn.png" />
+                <DropShadow />
+                <Clicked Handler="{getPassword}">
+                    <Scale Factor="0.9" Duration="0.07" />
+                </Clicked>
+                <WhileTrue Value="{loading}">
+                    <Spin Frequency="2"/>
+                </WhileTrue>
+            </Circle>
+            <WhiteText Dock="Bottom" Alignment="Center" Margin="0,10" FontSize="20" Value="{password}"></WhiteText>
+        </DockPanel>
+    </Grid>
+</App>

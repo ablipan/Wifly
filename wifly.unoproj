@@ -1,0 +1,43 @@
+{
+    "Title": "Wifly",
+    "Description": "share my wifi",
+    "Version": "0.0.1",
+    "VersionCode": 1,
+    "Publisher": "ablipan",
+    "RootNamespace":"com.ablipan.wifly",
+    "Packages": [
+        "Fuse",
+        "FuseJS",
+        "Fuse.Launcher"
+    ],
+    "Includes": [
+        "*",
+        "utils/*.js:Bundle"
+    ],
+    "Mobile": {
+        "UriScheme": "wifly",
+        "Orientations": "Portrait"
+    },
+    "iOS": {
+        "BundleIdentifier": "com.ablipan.wifly",
+        "PreviewBundleIdentifier": "com.ablipan.wifly.preview",
+        "Icons": {
+            "iPhone_29_2x": "assets/img/icon/iPhone/Icon-Small@2x.png",
+            "iPhone_29_3x": "assets/img/icon/iPhone/Icon-Small@3x.png",
+            "iPhone_40_2x": "assets/img/icon/iPhone/Icon-Small-40@2x.png",
+            "iPhone_40_3x": "assets/img/icon/iPhone/Icon-Small-40@3x.png",
+            "iPhone_60_2x": "assets/img/icon/iPhone/Icon-60@2x.png",
+            "iPhone_60_3x": "assets/img/icon/iPhone/Icon-60@3x.png"
+        }
+    },
+    "Android": {
+        "Icons": {
+            "LDPI": "assets/img/icon/Android/drawable-ldpi/ic_launcher.png",
+            "MDPI": "assets/img/icon/Android/drawable-mdpi/ic_launcher.png",
+            "HDPI": "assets/img/icon/Android/drawable-hdpi/ic_launcher.png",
+            "XHDPI": "assets/img/icon/Android/drawable-xhdpi/ic_launcher.png",
+            "XXHDPI": "assets/img/icon/Android/drawable-xxhdpi/ic_launcher.png",
+            "XXXHDPI": "assets/img/icon/Android/drawable-xxxhdpi/ic_launcher.png"
+        }
+    }
+}
