@@ -1,2 +1,6 @@
-# Share my wifi (WIP)
-Develop with [Fuse](https://www.fusetools.com)
+# Get the fking AI-Guest password and connect automatically.
+Develop happily with [Fusetools](https://www.fusetools.com)
+
+# How to use
+* Android: Download from [Fir.im](http://fir.im/wifly)
+* iOS: build on your own mac `uno build ios --run`
