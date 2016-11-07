@@ -12,6 +12,7 @@
     ],
     "Includes": [
         "*",
+        "uno/*.java:Java:Android",
         "utils/*.js:Bundle"
     ],
     "Mobile": {
@@ -38,6 +39,12 @@
             "XHDPI": "assets/img/icon/Android/drawable-xhdpi/ic_launcher.png",
             "XXHDPI": "assets/img/icon/Android/drawable-xxhdpi/ic_launcher.png",
             "XXXHDPI": "assets/img/icon/Android/drawable-xxxhdpi/ic_launcher.png"
+        },
+        "Key": {
+            "Alias": "application",
+            "AliasPassword": "goodbye",
+            "Store": "release.keystore",
+            "StorePassword": "goodbye"
         }
     }
 }

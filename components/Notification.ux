@@ -13,7 +13,7 @@
         text: 'Yes!!!'
     })
 -->
-<Panel ux:Class="wifly.Notification" ux:Name="root" Alignment="Top" Height="0">
+<Panel ux:Class="wifly.Notification" ux:Name="root" Alignment="Top" Height="45">
     <JavaScript>
         var Observable = require('FuseJS/Observable')
         // Notification duration
@@ -58,18 +58,12 @@
     </JavaScript>
     <!-- listening the global event and handle by a fucntion -->
     <OnUserEvent EventName="globalNotification" Handler="{showNotification}" />
-    <Text Value="{text}" Color="{textColor}" Alignment="Center"></Text>
+    <Text ux:Name="text" Value="{text}" Color="{textColor}" Alignment="Center"></Text>
     <Rectangle Layer="Background" Color="{theme}" CornerRadius="0,0,5,5" />
+    <Translation RelativeTo="Size" Y="-1" />
     <WhileTrue Value="{visible}">
-        <Set root.Height="45" />
+        <Move RelativeTo="Size" Y="1" Duration=".25" Easing="QuadraticInOut" DurationBack=".1" EasingBack="Linear"/>
     </WhileTrue>
-    <WhileFalse Value="{visible}">
-        <Set root.Height="0" />
-    </WhileFalse>
     <!-- Hide the notification when clicked -->
     <Clicked Handler="{hideNotification}" />
-    <LayoutAnimation>
-        <Move RelativeTo="Size" Y="-1" Duration="0.75" Easing="ElasticIn" />
-        <Resize Y="1" RelativeTo="SizeChange" Duration="0.75" Easing="ElasticIn" />
-    </LayoutAnimation>
 </Panel>

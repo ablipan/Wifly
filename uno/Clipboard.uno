@@ -24,7 +24,13 @@ public class Clipboard : NativeModule
             throw new Exception("copy() requires exactly 1 parameter.");
         }
         string text = args[0] as string;
-        CopyText(text);
+        if defined(iOS) {
+            CopyText(text);
+        } else if defined(ANDROID) {
+            CopyText(text);
+        } else {
+            debug_log "Not supported!";
+        }
         return true;
     }
 
@@ -38,18 +44,22 @@ public class Clipboard : NativeModule
     [Foreign(Language.Java)]
     static extern(Android) void CopyText(string message)
     @{
+        if (android.os.Looper.myLooper() == null)
+        {
+            android.os.Looper.prepare();
+        }
         android.app.Activity context = com.fuse.Activity.getRootActivity();
         try {
             int sdk = android.os.Build.VERSION.SDK_INT;
             if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
                 android.text.ClipboardManager clipboard = (android.text.ClipboardManager) context
                         .getSystemService(context.CLIPBOARD_SERVICE);
-                clipboard.setText(text);
+                clipboard.setText(message);
             } else {
                 android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context
                         .getSystemService(context.CLIPBOARD_SERVICE);
                 android.content.ClipData clip = android.content.ClipData
-                        .newPlainText("", text);
+                        .newPlainText("", message);
                 clipboard.setPrimaryClip(clip);
             }
         } catch (Exception e) {
