@@ -1,4 +1,4 @@
-# Get the fking AI-Guest password and connect automatically.
+# Just for fun
 Develop happily with [Fusetools](https://www.fusetools.com)
 
 # How to use
