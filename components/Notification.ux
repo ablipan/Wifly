@@ -12,6 +12,14 @@
         // content
         text: 'Yes!!!'
     })
+
+    or
+
+    2. add the Notification.js to the .unoproj.
+    3. require the Notification in js
+    var Notification = require('./Componnets/Notification')(globalNotification)
+    Notification.show('hello', 'info')
+
 -->
 <Panel ux:Class="wifly.Notification" ux:Name="root" Alignment="Top" Height="45">
     <JavaScript>
@@ -19,11 +27,10 @@
         // Notification duration
         var DURATION = 3000
         var COLORS = {
-            primary: '#3273dc',
             info: '#e8e8e8',
             success: '#23d160',
             warning: '#ffdd57',
-            danger: '#ff3860'
+            error: '#ff3860'
         }
         var timeoutId
         var visible = Observable(false)
@@ -31,12 +38,15 @@
         var textColor = Observable('#fff')
         var theme = Observable(COLORS.info)
         function showNotification(args) {
+            console.dir(args)
             if (args.text) {
                 visible.value = true
                 text.value = args.text
-                theme.value = COLORS[args.type] || COLORS.primary
+                theme.value = COLORS[args.type] || COLORS.info
                 if (args.type === 'warning' || args.type === 'info') {
                     textColor.value = '#000'
+                } else {
+                    textColor.value = '#fff'
                 }
                 clearTimeout(timeoutId)
                 timeoutId = setTimeout(hideNotification, DURATION)

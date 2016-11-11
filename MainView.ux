@@ -1,157 +1,73 @@
 <App>
     <Fuse.iOS.StatusBarConfig Style="Light" />
-
-    <Font ux:Global="RobotoRegular" File="assets/font/Roboto-Regular.ttf"/>
-    <Text ux:Class="WhiteText" Color="White" Font="RobotoRegular" />
-
+    <!-- Events -->
     <UserEvent ux:Name="globalNotification" />
-
-    <JavaScript>
-        var Observable = require('FuseJS/Observable')
-        var model = require('./utils/model')
-        var Clipboard = require('Clipboard')
-        var WifiConnector = require('WifiConnector')
-        var Environment = require('FuseJS/Environment')
-
-        var AI_GUIST_URL = 'http://hram-elb2-1033590448.cn-north-1.elb.amazonaws.com.cn/wemedia_2.0/common/commonAction!aiguest'
-        var loading = Observable(false)
-        var error = Observable('')
-        var password = Observable('')
-        var logs = Observable()
-
-        function _parseAiGuestPass(password) {
-            password = password.match(/>.*</ig)[0]
-            password = password.match(/>.*</ig)[0]
-            return password.substr(1, password.length - 2 )
-        }
-
-        function getPassword() {
-            loading.value = true
-            addLog('正在获取 AI-Guest 密码...')
-            model.get(AI_GUIST_URL).then(function(result) {
-                if(result.status === 0) {
-                    try{
-                        var _password = _parseAiGuestPass(result.data.redata)
-                        password.value = _password
-                        // copy to clipboard
-                        Clipboard.copy(_password).then(function() {
-                            addLog('密码 ' +_password+ ' 已复制到剪切板')
-                            if(Environment.ios) {
-                                addLog('iOS 系统请到 Wi-Fi 设置中手动连接。')
-                            }
-                        }, function(err) {
-                            globalNotification.raise({
-                                type: 'danger',
-                                text: err
-                            })
-                        })
-                        if(Environment.android) {
-                            addLog('正在自动连接 Wi-Fi ...')
-                            WifiConnector.connect('AI_GUEST', _password).then(function(result) {
-                                if (result === 1001){
-                                    addLog('当前 Wi-Fi 已连接 AI-Guest', 1)
-                                } else if(result == 0) {
-                                    addLog('连接请求完成')
-                                } else if(result == 4) {
-                                    addLog('未搜索到 AI-Guest', 1)
-                                } else {
-                                    addLog('Bang ~ 发生了什么...', 2)
-                                }
-                            }, function(err) {
-                                globalNotification.raise({
-                                    type: 'danger',
-                                    text: err
-                                })
-                            })
-                        }
-                    } catch(e) {
-                        password.value = ''
-                        globalNotification.raise({
-                            type: 'danger',
-                            text: '获取 AI-Guest 密码失败!'
-                        })
-                    }
-                } else {
-                    globalNotification.raise({
-                        type: 'danger',
-                        text: result.errmsg || '获取 AI-Guest 密码失败!'
-                    })
-                }
-            }, function(err) {
-                password.value = ''
-                globalNotification.raise({
-                    type: 'danger',
-                    text: err || '获取 AI-Guest 密码失败!'
-                })
-            }).then(function() {
-                setTimeout(function() {
-                    loading.value = false
-                }, 500)
-            })
-        }
-
-        //getPassword()
-
-        function exit() {
-            // TODO 退出应用
-        }
-
-        function addLog(text, type) {
-            logs.add({
-                text,
-                type: type || 0
-            })
-            // 有没有类似于 Vue 的 nextTick() ？？？
-            setTimeout(function() {
-                LogScrollView.gotoRelative(0, 1)
-            }, 500)
-        }
-
-        module.exports = {
-            getPassword,
-            loading,
-            password,
-            exit,
-            logs,
-        }
-    </JavaScript>
-
+    <!-- Fonts -->
+    <Font ux:Global="RobotoRegular" File="assets/fonts/Roboto-Regular.ttf"/>
+    <Font ux:Global="fa" File="assets/fonts/fontawesome-webfont.ttf" />
+    <ux:Include File="components/Fonts.ux" />
+    <!-- Local Components -->
+    <Text ux:Class="WhiteText" Color="White" Font="RobotoRegular" />
+    <!-- Javascript -->
+    <JavaScript File="MainView.js"/>
     <DockPanel>
         <StatusBarBackground Dock="Top" Background="#6A6B72" />
         <Panel>
             <wifly.Notification />
             <Rectangle Layer="Background" Color="#6A6B72" />
-            <Grid Rows="1*,1*,1*">
+            <Grid Rows="1*,2*,1*">
                 <Panel>
                     <StackPanel Alignment="VerticalCenter">
-                        <WhiteText Alignment="Center" FontSize="40" Value="我们不是访客" />
+                        <WhiteText Alignment="Center" FontSize="40" Value="我不是访客" />
                         <WhiteText Alignment="Center" FontSize="16" Value="Just Wi-Fi Please!" />
                     </StackPanel>
                 </Panel>
-                <Circle Height="180" Width="180">
-                    <Image File="assets/img/connect-btn.png" />
-                    <DropShadow Size="10" />
-                    <Clicked Handler="{getPassword}">
-                        <Scale Factor="0.9" Duration="0.07" />
-                    </Clicked>
-                    <WhileTrue Value="{loading}">
-                        <Spin Frequency="2" />
-                    </WhileTrue>
-                </Circle>
-                <Panel Margin="10">
+                <Panel>
+                    <Circle Height="180" Width="180">
+                        <Image File="assets/img/connect-btn.png" />
+                        <Clicked Handler="{fly}">
+                            <Scale Factor="0.9" Duration="0.07" />
+                        </Clicked>
+                        <WhileTrue Value="{loading}">
+                            <Spin Frequency="2" />
+                        </WhileTrue>
+                        <WhileFalse Value="{loading}">
+                            <DropShadow Size="10" />
+                        </WhileFalse>
+                    </Circle>
+                    <!--Panel Alignment="CenterRight" Width="40" Height="40" Margin="0,0,10,0">
+                        <Fa-share-square FontSize="30" Color="White" Alignment="Center" />
+                        <Clicked Handler="{share}">
+                            <Scale Factor="0.9" Duration="0.07" />
+                        </Clicked>
+                    </Panel-->
+                </Panel>
+                <Panel ux:Name="logPanel" Margin="10" Visibility="Visible">
+                    <Panel Width="50"
+                        Height="50"
+                        Margin="0,5,5,0"
+                        Alignment="TopRight"
+                        HitTestMode="LocalBoundsAndChildren"
+                        >
+                        <Image File="assets/img/remove.png"
+                            Height="20"
+                            Width="20"
+                            Alignment="TopRight"
+                        />
+                        <Clicked Handler="{clearLog}">
+                            <Scale Factor="0.9" Duration="0.07" />
+                        </Clicked>
+                    </Panel>
+                    <WhileCount Items="{logs}" GreaterThan="0">
+                        <Change logPanel.Visibility="Visible" Duration=".5" Easing="ElasticIn" />
+                    </WhileCount>
                     <Rectangle Layer="Background" Color="#181818" CornerRadius="5">
                         <DropShadow />
                     </Rectangle>
-                    <ScrollView ux:Name="LogScrollView" LayoutMode="PreserveScrollPosition">
+                    <ScrollView ux:Name="LogScrollView">
                         <StackPanel Padding="15" ItemSpacing="10">
                             <Each Items="{logs}">
-                                <Text ux:Name="log" Color="#2ef700" Value="{text}">
-                                    <!--Match Value="{type}">
-                                        <Case Number="1">
-                                            <Set log.Color="White" />
-                                        </Case>
-                                    </Match-->
-                                </Text>
+                                <Text ux:Name="log" Color="{color}" Value="{text}" FontSize="14" />
                             </Each>
                         </StackPanel>
                     </ScrollView>
@@ -159,7 +75,6 @@
             </Grid>
         </Panel>
     </DockPanel>
-
-    <!-- 退出 app -->
+    <!-- exit app while back button pressed -->
     <OnBackButton Handler="{exit}" />
 </App>

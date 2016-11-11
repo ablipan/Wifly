@@ -39,6 +39,12 @@ public class Clipboard : NativeModule
     @{
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         pasteboard.string = message;
+        /*NSURL *url = [NSURL URLWithString:@"prefs:root=WIFI"];
+        if ([[UIApplication sharedApplication] canOpenURL:url]) {
+            [[UIApplication sharedApplication] openURL:url];
+        } else {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+        }*/
     @}
 
     [Foreign(Language.Java)]

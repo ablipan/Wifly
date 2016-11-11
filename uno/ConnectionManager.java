@@ -1,6 +1,5 @@
 package com.foreign;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -8,7 +7,6 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.nfc.Tag;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -78,6 +76,7 @@ public class ConnectionManager {
                         break;
                 }
                 return 0;
+
             }
             /*connectME();*/
         } catch (Exception e) {
@@ -91,12 +90,16 @@ public class ConnectionManager {
         wc.SSID = "\"" + networkSSID + "\"";
         wc.preSharedKey = "\"" + networkPass + "\"";
         wc.status = WifiConfiguration.Status.ENABLED;
+        wc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
+        wc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
         wc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
         wc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
         wc.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
         wc.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
         wc.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
         wc.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+        wc.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+
         // connect it first
         wc.priority = 0xBADBAD;
         int id = wifiManager.addNetwork(wc);
@@ -106,6 +109,7 @@ public class ConnectionManager {
     }
 
     private void WEP(String networkSSID, String networkPass) {
+        Log.d(TAG, "Not support WEP");
     }
 
     private void OPEN(WifiManager wifiManager, String networkSSID) {

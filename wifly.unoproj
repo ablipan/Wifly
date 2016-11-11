@@ -8,12 +8,14 @@
     "Packages": [
         "Fuse",
         "FuseJS",
-        "Fuse.Launcher"
+        "Fuse.Launcher",
+        "Uno.Permissions"
     ],
     "Includes": [
         "*",
         "uno/*.java:Java:Android",
-        "utils/*.js:Bundle"
+        "utils/*.js:Bundle",
+        "components/*.js:Bundle"
     ],
     "Mobile": {
         "UriScheme": "wifly",
@@ -32,6 +34,8 @@
         }
     },
     "Android": {
+        "Package": "com.ablipan.wifly",
+        "PreviewPackage": "com.ablipan.wifly.preview",
         "Icons": {
             "LDPI": "assets/img/icon/Android/drawable-ldpi/ic_launcher.png",
             "MDPI": "assets/img/icon/Android/drawable-mdpi/ic_launcher.png",

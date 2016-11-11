@@ -1,6 +1,6 @@
 var _ = require('./lodash.min')
 
-var DEF_ERR = '操作失败了'
+var DEF_ERR = '操作失败'
 
 /**
  * request
