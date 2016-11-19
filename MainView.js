@@ -2,6 +2,8 @@
 var Observable = require('FuseJS/Observable')
 var Environment = require('FuseJS/Environment')
 var Lifecycle = require('FuseJS/Lifecycle')
+var Base64 = require("FuseJS/Base64")
+
 // js module
 var model = require('./utils/model')
 var Notification = require('./components/Notification')(globalNotification)
@@ -13,6 +15,8 @@ var AI_GUIST_URL = 'http://hram-elb2-1033590448.cn-north-1.elb.amazonaws.com.cn/
 var loading = Observable(false)
 var error = Observable('')
 var password = Observable('')
+var qrcodeUrl = Observable('')
+var qrcodeVisible = Observable(false)
 var logs = Observable()
 var logViewVisible = Observable(false)
 
@@ -52,6 +56,7 @@ function fly() {
             try{
                 var _password = _parseAiGuestPass(result.data.redata)
                 password.value = _password
+                qrcodeUrl.value = 'http://qr.topscan.com/api.php?fg=2db7f5&pt=00a0e9&inpt=1e80d3&gc=1e80d3&m=20&text=' + Base64.encodeUtf8(_password)
                 // copy to clipboard
                 Clipboard.copy(_password).then(function() {
                     addLog('密码 ' +_password+ ' 已复制到剪切板')
@@ -102,7 +107,7 @@ if(Environment.ios) {
 }
 
 function _connect() {
-    WifiConnector.connect('AI_GUEST', _password).then(function(result) {
+    WifiConnector.connect('AI_GUEST', password.value).then(function(result) {
         if (result === 1001){
             addLog('当前 Wi-Fi 已连接 AI-Guest', 1)
         } else if(result == 0) {
@@ -122,16 +127,23 @@ function exit() {
 }
 
 function share() {
-    Notification.error('hey')
+    qrcodeVisible.value = true
+}
+
+function hideQrcode() {
+    qrcodeVisible.value = false
 }
 
 module.exports = {
     fly,
     loading,
     password,
+    qrcodeUrl,
     exit,
     logs,
     clearLog,
     share,
     logViewVisible,
+    hideQrcode,
+    qrcodeVisible,
 }

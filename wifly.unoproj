@@ -1,8 +1,8 @@
 {
     "Title": "Wifly",
     "Description": "share my wifi",
-    "Version": "0.0.1",
-    "VersionCode": 1,
+    "Version": "0.0.2",
+    "VersionCode": 2,
     "Publisher": "ablipan",
     "RootNamespace":"com.ablipan.wifly",
     "Packages": [

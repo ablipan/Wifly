@@ -13,15 +13,34 @@
     <DockPanel>
         <StatusBarBackground Dock="Top" Background="#6A6B72" />
         <Panel>
+            <!-- 全局通知 -->
             <wifly.Notification />
+            <!-- 分享二维码 -->
+            <Panel ux:Name="qrcode" HitTestMode="LocalBoundsAndChildren">
+                <Clicked Handler="{hideQrcode}" />
+                <Panel Alignment="Center" Width="200" Height="200">
+                    <Image Url="{qrcodeUrl}" />
+                </Panel>
+            </Panel>
+            <WhileTrue Value="{qrcodeVisible}">
+                <Change qrcode.Visibility="Visible" Duration=".3" Easing="QuadraticInOut" />
+                <Change mainPanel.Opacity=".3" Duration=".3" Easing="QuadraticInOut" />
+            </WhileTrue>
+            <WhileFalse Value="{qrcodeVisible}">
+                <Change qrcode.Visibility="Hidden" Duration=".3" Easing="QuadraticInOut" />
+                <Change mainPanel.Opacity="1" Duration=".3" Easing="QuadraticInOut" />
+            </WhileFalse>
+            <!-- 主界面 -->
             <Rectangle Layer="Background" Color="#6A6B72" />
-            <Grid Rows="1*,2*,1*">
+            <Grid Rows="1*,2*,1*" ux:Name="mainPanel">
+                <!-- Fk it -->
                 <Panel>
                     <StackPanel Alignment="VerticalCenter">
                         <WhiteText Alignment="Center" FontSize="40" Value="我不是访客" />
                         <WhiteText Alignment="Center" FontSize="16" Value="Just Wi-Fi Please!" />
                     </StackPanel>
                 </Panel>
+                <!-- 按钮区域 -->
                 <Panel>
                     <Circle Height="180" Width="180">
                         <Image File="assets/img/connect-btn.png" />
@@ -35,13 +54,21 @@
                             <DropShadow Size="10" />
                         </WhileFalse>
                     </Circle>
-                    <!--Panel Alignment="CenterRight" Width="40" Height="40" Margin="0,0,10,0">
+                    <!-- 分享按钮 -->
+                    <Panel ux:Name="shareBtn" Alignment="CenterRight" Width="50" Height="50" Margin="0,0,20,0">
                         <Fa-share-square FontSize="30" Color="White" Alignment="Center" />
                         <Clicked Handler="{share}">
                             <Scale Factor="0.9" Duration="0.07" />
                         </Clicked>
-                    </Panel-->
+                    </Panel>
+                    <WhileString Value="{password}" Test="IsNotEmpty">
+                        <Change shareBtn.Opacity="1" Duration=".5" />
+                    </WhileString>
+                    <WhileString Value="{password}" Test="IsEmpty">
+                        <Change shareBtn.Opacity="0" Duration=".5" />
+                    </WhileString>
                 </Panel>
+                <!-- 日志信息 -->
                 <Panel ux:Name="logPanel" Margin="10" Visibility="Visible">
                     <Panel Width="50"
                         Height="50"
@@ -49,11 +76,7 @@
                         Alignment="TopRight"
                         HitTestMode="LocalBoundsAndChildren"
                         >
-                        <Image File="assets/img/remove.png"
-                            Height="20"
-                            Width="20"
-                            Alignment="TopRight"
-                        />
+                        <Fa-eraser FontSize="15" Color="White" Alignment="TopRight" />
                         <Clicked Handler="{clearLog}">
                             <Scale Factor="0.9" Duration="0.07" />
                         </Clicked>
