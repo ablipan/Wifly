@@ -7,6 +7,6 @@ This project is developed happily with [Fusetools](https://www.fusetools.com)
 * Android: Download from [Fir.im](http://fir.im/wifly) or build by yourself
 * iOS: build by yourself
 
-![](http://7xpcvs.com1.z0.glb.clouddn.com/wifly.JPG)
+<img src="http://7xpcvs.com1.z0.glb.clouddn.com/wifly.JPG" width="360" height="640" />
 
 Have fun!
