@@ -39,7 +39,7 @@ public class Clipboard : NativeModule
     @{
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         pasteboard.string = message;
-        NSString *url = @"prefs:root=SOMETHING";
+        //NSString *url = @"prefs:root=SOMETHING";
         //Class LSApplicationWorkspace_class = objc_getClass("LSApplicationWorkspace");
         //[[LSApplicationWorkspace_class defaultWorkspace] openSensitiveURL:url withOptions:nil];
         /*NSURL *url = [NSURL URLWithString:@"prefs:root=WIFI"];
