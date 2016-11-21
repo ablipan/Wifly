@@ -1,4 +1,6 @@
 <Panel>
     <Text ux:Class="Fa-share-square" Font="fa">&#xf14d;</Text>
     <Text ux:Class="Fa-eraser" Font="fa">&#xf12d;</Text>
+    <Text ux:Class="Fa-spinner" Font="fa">&#xf110;</Text>
+    <Text ux:Class="Fa-github" Font="fa">&#xf09b;</Text>
 </Panel>

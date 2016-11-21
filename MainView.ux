@@ -21,6 +21,11 @@
                 <Panel Alignment="Center" Width="200" Height="200">
                     <Image Url="{qrcodeUrl}" />
                 </Panel>
+                <Fa-spinner FontSize="30" Color="White" Alignment="Center">
+                    <WhileTrue Value="{qrcodeVisible}">
+                        <Spin Frequency=".5" />
+                    </WhileTrue>
+                </Fa-spinner>
             </Panel>
             <WhileTrue Value="{qrcodeVisible}">
                 <Change qrcode.Visibility="Visible" Duration=".3" Easing="QuadraticInOut" />
@@ -36,7 +41,16 @@
                 <!-- Fk it -->
                 <Panel>
                     <StackPanel Alignment="VerticalCenter">
-                        <WhiteText Alignment="Center" FontSize="40" Value="我不是访客" />
+                        <StackPanel Alignment="Center" Orientation="Horizontal">
+                            <WhiteText FontSize="40" Value="我不是访客" />
+                            <Panel Alignment="Center" Padding="10" HitTestMode="LocalBoundsAndChildren">
+                                <Fa-github Color="#6dc0d2" FontSize="30" Margin="0,2,0,0" />
+                                <Clicked>
+                                    <Scale Factor="0.9" Duration="0.07" />
+                                    <LaunchUri Delay="0.1" Uri="https://github.com/ablipan/Wifly" />
+                                </Clicked>
+                            </Panel>
+                        </StackPanel>
                         <WhiteText Alignment="Center" FontSize="16" Value="Just Wi-Fi Please!" />
                     </StackPanel>
                 </Panel>
@@ -55,7 +69,7 @@
                         </WhileFalse>
                     </Circle>
                     <!-- 分享按钮 -->
-                    <Panel ux:Name="shareBtn" Alignment="CenterRight" Width="50" Height="50" Margin="0,0,20,0">
+                    <Panel ux:Name="shareBtn" Alignment="CenterRight" Width="50" Height="50" Margin="0,0,15,0" HitTestMode="LocalBoundsAndChildren">
                         <Fa-share-square FontSize="30" Color="White" Alignment="Center" />
                         <Clicked Handler="{share}">
                             <Scale Factor="0.9" Duration="0.07" />

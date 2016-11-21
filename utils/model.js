@@ -1,6 +1,6 @@
 var _ = require('./lodash.min')
 
-var DEF_ERR = '操作失败'
+var DEF_ERR = '请求失败'
 
 /**
  * request
@@ -11,6 +11,7 @@ var DEF_ERR = '操作失败'
  * @private
  */
 function _request(url, params, option) {
+  debugger
   return new Promise((resolve, reject) => {
     fetch(url, _.assign({
       credentials: 'include',
@@ -32,7 +33,9 @@ function _request(url, params, option) {
         resolve()
       }
     }).catch((err) => {
-      reject(err)
+      debugger
+      console.dir(err)
+      reject('网络错误')
     })
   })
 }

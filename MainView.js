@@ -2,7 +2,6 @@
 var Observable = require('FuseJS/Observable')
 var Environment = require('FuseJS/Environment')
 var Lifecycle = require('FuseJS/Lifecycle')
-var Base64 = require("FuseJS/Base64")
 
 // js module
 var model = require('./utils/model')
@@ -10,6 +9,7 @@ var Notification = require('./components/Notification')(globalNotification)
 // Uno module
 var Clipboard = require('Clipboard')
 var WifiConnector = require('WifiConnector')
+var ExitApp = require('ExitApp')
 
 var AI_GUIST_URL = 'http://hram-elb2-1033590448.cn-north-1.elb.amazonaws.com.cn/wemedia_2.0/common/commonAction!aiguest'
 var loading = Observable(false)
@@ -56,7 +56,7 @@ function fly() {
             try{
                 var _password = _parseAiGuestPass(result.data.redata)
                 password.value = _password
-                qrcodeUrl.value = 'http://qr.topscan.com/api.php?fg=2db7f5&pt=00a0e9&inpt=1e80d3&gc=1e80d3&m=20&text=' + Base64.encodeUtf8(_password)
+                qrcodeUrl.value = 'http://qr.topscan.com/api.php?fg=2db7f5&pt=00a0e9&inpt=1e80d3&gc=1e80d3&m=20&text=' + _password
                 // copy to clipboard
                 Clipboard.copy(_password).then(function() {
                     addLog('密码 ' +_password+ ' 已复制到剪切板')
@@ -122,8 +122,14 @@ function _connect() {
     })
 }
 
+var lastBackPressedDate = +new Date()
 function exit() {
-    // TODO 退出应用
+    var current = +new Date()
+    if (current - lastBackPressedDate < 500) {
+        ExitApp.exit()
+    } else {
+        lastBackPressedDate = current
+    }
 }
 
 function share() {
