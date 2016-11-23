@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * ConnectionManager
+ * borrow from: http://stackoverflow.com/a/30889687/5461916
  *
  * How to use:
  * ConnectionManager connectionManager=new ConnectionManager(context);
