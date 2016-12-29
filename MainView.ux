@@ -65,7 +65,7 @@
                             <Spin Frequency="2" />
                         </WhileTrue>
                         <WhileFalse Value="{loading}">
-                            <DropShadow Size="10" />
+                            <DropShadow Size="8" />
                         </WhileFalse>
                     </Circle>
                     <!-- 分享按钮 -->
